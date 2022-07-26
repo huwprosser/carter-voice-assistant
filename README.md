@@ -1,4 +1,4 @@
-# carter-voice-assistant
+# Carter Voice Assistant Boilerplate(Python)
 An example project showing how to use www.carterapi.com as a voice assistant. It uses LOCAL speech recoginition to get the user's voice input, and then uses the Carter API to get the response. It also uses the Carter API to get the agent's voice output.
 
 <h2>A note on speech recognition:</h2>
@@ -16,5 +16,6 @@ Then, run the following command to start the server:
 
 <h2>Known Issues:</h2>
 - Speech-to-text Performance is not optimized and could be optimized in conjunction with n-grams. 
+
 - Speed could be improved.
 
