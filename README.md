@@ -13,6 +13,7 @@ Then, run the following command to start the server:
 
 ```python app.py --key your-api-key --voice True```
 
+To find out more about the API key and configure your agent, visit the [Carter API](https://www.carterapi.com/).
 
 <h2>Known Issues:</h2>
 - Speech-to-text Performance is not optimized and could be optimized in conjunction with n-grams. 
