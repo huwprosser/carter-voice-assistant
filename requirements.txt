@@ -1,1 +1,6 @@
+torch
 transformers
+librosa
+webrtcvad
+sounddevice
+pydub

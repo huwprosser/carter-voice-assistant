@@ -1,0 +1,109 @@
+import os
+import librosa
+import requests
+import threading
+import warnings
+import sounddevice as sd
+from modules.SpeechToText import STT
+from modules.VoiceActivityDetection import VADDetector
+
+# Supress PyAudio warning if you don't have ffmeg installed:
+warnings.filterwarnings("ignore")
+
+class CarterClient():
+    def __init__(self,  key, user_id, startListening=False, voice=False):
+        self.key = key
+        self.voice = voice
+        self.user_id = user_id
+        self.listening = startListening
+        self.vad = VADDetector(self.onSpeechStart, self.onSpeechEnd)
+        self.stt = STT(self.done)
+
+        if startListening:
+            print("Listening...")
+            t = threading.Thread(target=self.vad.startListening)
+            t.start()
+
+    def startListening(self):
+        t = threading.Thread(target=self.vad.startListening)
+        t.start()
+
+    def toggleListening(self):
+        self.listening = not self.listening
+        # print("Listening:", self.listening)
+
+    def done(self):
+        print("done")
+
+    def onSpeechStart(self):
+        pass
+
+    def onSpeechEnd(self, path):
+        if self.listening and path:
+            self.toggleListening()
+            input_audio, _ = librosa.load(path, sr=16000)
+            transcription = self.stt.convert(input_audio)
+            
+            if len(transcription) > 1:
+                print("You: ", transcription)
+                self.sendToCarter(transcription)
+            
+            print("\n\nListening...")
+            self.toggleListening();
+        os.remove(path)
+
+    def playAudio(self, url):
+        
+        # download from url
+        r = requests.get(url, stream=True)
+        with open('temp.wav', 'wb') as f:
+            for chunk in r.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(chunk)
+
+        # load audio
+        input_audio, _ = librosa.load('temp.wav', sr=22050)
+
+        # play audio
+        sd.play(input_audio, 22050)
+        sd.wait()
+
+    
+    def sendToCarter(self, text):
+        r = requests.post('https://api.carterapi.com/v0/chat', json={
+            'api_key': self.key,
+            'query': text,
+            'uuid': self.user_id,
+        })
+
+        agent_response = r.json()
+        output = agent_response['output']
+        print("Agent: " , output['text'])
+
+        if self.voice and 'voice' in output:
+            self.playAudio(output['voice'])
+
+
+if __name__ == "__main__":
+
+    print("Carter Voice Client Starting...")
+    print("Loading voice models. This may take a second...")
+
+    import argparse
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-k", "--key", help="API KEY")
+    parser.add_argument("-v", "--voice", help="Activate voice", default=False)
+
+    jc = CarterClient(
+        startListening=True, 
+        key=parser.parse_args().key,
+        voice=parser.parse_args().voice, 
+        user_id='1234')
+
+    
+
+# TO DO
+# remove need for saving wav by converting form bytes into np array
+# cleanup everything
+# add to server

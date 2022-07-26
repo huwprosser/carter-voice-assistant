@@ -1,12 +1,18 @@
-import sys
 import time
 import wave
+import pyaudio
 import webrtcvad
 import contextlib
 import collections
-import numpy as np # required to avoid crashing in assigning the callback input which is a numpy object
 import sounddevice as sd
 
+RATE = 16000
+CHUNK = 160
+CHANNELS = 1
+FORMAT = pyaudio.paInt16
+
+audio = pyaudio.PyAudio()
+ 
 class VADDetector():
     def __init__(self, onSpeechStart, onSpeechEnd):
         self.channels = [1]
@@ -34,31 +40,23 @@ class VADDetector():
     def voice_activity_detection(self, audio_data):
         return self.vad.is_speech(audio_data, self.sample_rate)
 
-    def audio_callback(self, indata, frames, time, status):        
-
-        if status:
-            print(F"underlying audio stack warning:{status}", file=sys.stderr)
-
-        assert frames == self.block_size
+    def audio_callback(self, indata, frames, time, status): 
         audio_data = indata
-        audio_data = map(lambda x: (x+1)/2, audio_data) 
-        audio_data = np.fromiter(audio_data, np.float16)
-        audio_data = audio_data.tobytes()
-
         detection = self.voice_activity_detection(audio_data)
-
-        # Write the bytes to the byte array when speech detected
 
         if(self.frameHistory[-1] == True and detection == True):
             self.onSpeechStart()
             self.voiced_frames.append(audio_data)
             self.block_since_last_spoke = 0
         else:
-            if(self.block_since_last_spoke == self.sensitivity * 10 * self.interval_size):
-                path = 'chunk-%002d.wav' % (len(self.frameHistory),)
-                samp = b''.join(self.voiced_frames)
-                self.write_wave(path, samp, self.sample_rate)
-                self.onSpeechEnd(path)
+            if(self.block_since_last_spoke == self.sensitivity * 10 * self.interval_size) :
+
+                if len(self.voiced_frames) > 0:
+                
+                    path = 'chunk-%002d.wav' % (len(self.frameHistory),)
+                    samp = b''.join(self.voiced_frames)
+                    self.write_wave(path, samp, self.sample_rate)
+                    self.onSpeechEnd(path)
                 self.voiced_frames = []
             else:
                 # if last block was not speech don't add
@@ -71,17 +69,17 @@ class VADDetector():
 
 
     def startListening(self):
-        with sd.InputStream(
-            device=None,  # the default input device
-            channels=1,
-            samplerate=self.sample_rate,
-            blocksize=int(self.block_size),
-            callback=self.audio_callback):
-
-            # avoid shutting down for endless processing of input stream audio
-            while True:
-                time.sleep(0.1)  # intermittently wake up
-
+        stream = audio.open(format=FORMAT, channels=CHANNELS,
+                rate=RATE, input=True,
+                frames_per_buffer=CHUNK)
+        
+        while True:
+            try:
+                data = stream.read(CHUNK, exception_on_overflow=False)
+                self.audio_callback(data, CHUNK, time.time(), None)
+            except Exception as e:
+                print(e)
+                break
 
 if __name__ == "__main__":
     def onSpeechStart():
