@@ -16,6 +16,7 @@ Then, run the following command to start the server:
 To find out more about the API key and configure your agent, visit the [Carter API](https://www.carterapi.com/).
 
 <h2>Known Issues:</h2>
+- M1 Mac doesn't seem to support PyAudio.
 
 - Speech-to-text Performance is not optimized and could be optimized in conjunction with n-grams. 
 
