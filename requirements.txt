@@ -4,3 +4,5 @@ librosa
 webrtcvad
 sounddevice
 pydub
+wave
+pyaudio
