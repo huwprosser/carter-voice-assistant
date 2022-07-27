@@ -4,6 +4,7 @@ import pyaudio
 import webrtcvad
 import contextlib
 import collections
+import numpy as np
 import sounddevice as sd
 
 RATE = 16000
@@ -56,7 +57,7 @@ class VADDetector():
                     path = 'chunk-%002d.wav' % (len(self.frameHistory),)
                     samp = b''.join(self.voiced_frames)
                     self.write_wave(path, samp, self.sample_rate)
-                    self.onSpeechEnd(path)
+                    self.onSpeechEnd(np.frombuffer(samp, dtype=np.int16))
                 self.voiced_frames = []
             else:
                 # if last block was not speech don't add

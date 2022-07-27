@@ -1,9 +1,8 @@
 import os
-import librosa
 import requests
-import threading
 import warnings
-import sounddevice as sd
+import threading
+from playsound import playsound
 from modules.SpeechToText import STT
 from modules.VoiceActivityDetection import VADDetector
 
@@ -38,11 +37,11 @@ class CarterClient():
     def onSpeechStart(self):
         pass
 
-    def onSpeechEnd(self, path):
-        if self.listening and path:
+    def onSpeechEnd(self, data):
+        if self.listening and data.any():
             self.toggleListening()
-            input_audio, _ = librosa.load(path, sr=16000)
-            transcription = self.stt.convert(input_audio)
+            # input_audio, _ = librosa.load(path, sr=16000)
+            transcription = self.stt.convert(data)
             
             if len(transcription) > 1:
                 print("You: ", transcription)
@@ -50,23 +49,20 @@ class CarterClient():
             
             print("\n\nListening...")
             self.toggleListening();
-        os.remove(path)
+        # os.remove(path)
 
     def playAudio(self, url):
         
         # download from url
         r = requests.get(url, stream=True)
-        with open('temp.wav', 'wb') as f:
+        with open('temp.mp3', 'wb') as f:
             for chunk in r.iter_content(chunk_size=1024):
                 if chunk:
                     f.write(chunk)
-
-        # load audio
-        input_audio, _ = librosa.load('temp.wav', sr=22050)
-
-        # play audio
-        sd.play(input_audio, 22050)
-        sd.wait()
+                    
+        playsound('temp.mp3')           
+        # remove temp file
+        os.remove('temp.mp3')
 
     
     def sendToCarter(self, text):
