@@ -29,7 +29,6 @@ class CarterClient():
 
     def toggleListening(self):
         self.listening = not self.listening
-        # print("Listening:", self.listening)
 
     def done(self):
         print("done")
@@ -49,7 +48,6 @@ class CarterClient():
             
             print("\n\nListening...")
             self.toggleListening();
-        # os.remove(path)
 
     def playAudio(self, url):
         

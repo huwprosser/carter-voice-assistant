@@ -53,10 +53,7 @@ class VADDetector():
             if(self.block_since_last_spoke == self.sensitivity * 10 * self.interval_size) :
 
                 if len(self.voiced_frames) > 0:
-                
-                    path = 'chunk-%002d.wav' % (len(self.frameHistory),)
                     samp = b''.join(self.voiced_frames)
-                    self.write_wave(path, samp, self.sample_rate)
                     self.onSpeechEnd(np.frombuffer(samp, dtype=np.int16))
                 self.voiced_frames = []
             else:
