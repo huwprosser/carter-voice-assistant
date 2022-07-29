@@ -15,14 +15,3 @@ class STT():
         logits = self.model(input_values).logits
         predicted_ids = torch.argmax(logits, dim=-1)
         return self.tokenizer.batch_decode(predicted_ids)[0]
-
-if __name__ == "__main__":
-    import librosa
-
-    def done():
-        print("done")
-
-    stt = STT(done)
-    input_audio, _ = librosa.load('two.wav',  sr=16000)
-    print(stt.convert(input_audio))
-

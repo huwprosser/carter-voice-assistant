@@ -39,7 +39,6 @@ class CarterClient():
     def onSpeechEnd(self, data):
         if self.listening and data.any():
             self.toggleListening()
-            # input_audio, _ = librosa.load(path, sr=16000)
             transcription = self.stt.convert(data)
             
             if len(transcription) > 1:
