@@ -40,9 +40,4 @@ where 19.7.0 should be replaced with the portaudio version you get installed.
 this should be executed BEFORE running the `pip install -r requirements.txt` command
 
 <h2>Known Issues:</h2>
-- M1 Mac doesn't seem to support PyAudio (workaround awaiting testing from others)
-
-- Speech-to-text Performance is not optimized and could be optimized in conjunction with n-grams. 
-
-- Speed could be improved.
-
+- ```Expected scalar but found type float``` - Reinstall tensorflow.
