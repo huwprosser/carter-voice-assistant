@@ -1,9 +1,6 @@
 # Carter Voice Assistant Boilerplate(Python)
 An example project showing how to use www.carterapi.com as a voice assistant. It uses LOCAL speech recoginition to get the user's voice input, and then uses the Carter API to get the response. It also uses the Carter API to get the agent's voice output.
 
-<h2>A note on speech recognition:</h2>
-This demo used the out-of-the-box wave2vec2 without a n-gram model. This is a very simple model, and it is not recommended for use in production due to it's accuracy limitations. Carter API will soon provide a, more accurate, cloud-based speech recognition model.
-
 <h2>Get Started:</h2>
 To get started, install the requirements listed in the `requirements.txt` file by running:
 
@@ -39,5 +36,11 @@ where 19.7.0 should be replaced with the portaudio version you get installed.
 
 this should be executed BEFORE running the `pip install -r requirements.txt` command
 
+<h2>A note on speech recognition:</h2>
+This demo used the out-of-the-box wave2vec2 without a n-gram model. This is a very simple model, and it is not recommended for use in production due to it's accuracy limitations. Carter API will soon provide a, more accurate, cloud-based speech recognition model.
+
 <h2>Known Issues:</h2>
-- ```Expected scalar but found type float``` - Reinstall tensorflow.
+
+```Expected scalar but found type float```
+
+- Reinstall tensorflow.
