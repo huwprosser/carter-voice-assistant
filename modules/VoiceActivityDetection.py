@@ -21,7 +21,7 @@ class VADDetector():
         self.device_info = sd.query_devices(None, 'input')
         self.sample_rate = 16000 # int(self.device_info['default_samplerate'])
         self.interval_size = 10 # audio interval size in ms
-        self.sensitivity = .5 #Seconds
+        self.sensitivity = .2 #Seconds
         self.block_size = self.sample_rate * self.interval_size / 1000
         self.vad = webrtcvad.Vad()
         self.vad.set_mode(2)

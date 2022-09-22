@@ -63,6 +63,7 @@ class CarterClient():
 
     
     def sendToCarter(self, text):
+        print("Waiting for agent to respond...")
         r = requests.post('https://api.carterapi.com/v0/chat', json={
             'api_key': self.key,
             'query': text,

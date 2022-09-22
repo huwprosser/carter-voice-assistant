@@ -12,6 +12,8 @@ class STT():
 
     def convert(self, audio):
         input_values =  self.feature_extractor(audio, return_tensors="pt", sampling_rate=16000).input_values
+        # convert to Double
+        input_values = input_values.type(torch.FloatTensor)
         logits = self.model(input_values).logits
         predicted_ids = torch.argmax(logits, dim=-1)
         return self.tokenizer.batch_decode(predicted_ids)[0]
