@@ -6,3 +6,4 @@ playsound==1.2.2
 sounddevice
 transformers
 tensorflow
+requests
