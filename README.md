@@ -7,7 +7,6 @@ An example project showing how to use www.carterapi.com as a voice assistant. It
 MORE UPDATES SOON!
 
 <h2>Get Started:</h2>
-To get started, install the requirements listed in the `requirements.txt` file by running:
 
 First, install [OpenAI Whisper](https://github.com/openai/whisper):
 `pip install git+https://github.com/openai/whisper.git `
