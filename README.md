@@ -9,7 +9,10 @@ MORE UPDATES SOON!
 <h2>Get Started:</h2>
 To get started, install the requirements listed in the `requirements.txt` file by running:
 
+First, install [OpenAI Whisper](https://github.com/openai/whisper):
 `pip install git+https://github.com/openai/whisper.git `
+
+Then, install the other requirements:
 `pip install -r requirements.txt`
 
 Then, run the following command to start the server:
