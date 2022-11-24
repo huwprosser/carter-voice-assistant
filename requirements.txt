@@ -1,6 +1,6 @@
 wave
 torch
-pyaudio
+pygame
 webrtcvad
 playsound==1.2.2
 sounddevice
