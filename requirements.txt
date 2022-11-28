@@ -7,3 +7,6 @@ sounddevice
 transformers
 tensorflow
 requests
+termcolor
+yaspin
+scipy
