@@ -1,5 +1,4 @@
 wave
-torch
 pygame
 webrtcvad
 playsound==1.2.2
@@ -10,3 +9,4 @@ requests
 termcolor
 yaspin
 scipy
+whisper
