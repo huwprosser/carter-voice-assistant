@@ -1,11 +1,8 @@
 wave
-torch
 pygame
 webrtcvad
 playsound==1.2.2
 sounddevice
-transformers
-tensorflow
 requests
 termcolor
 yaspin
