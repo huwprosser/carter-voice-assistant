@@ -1,6 +1,6 @@
 # Carter API Python Voice Demo
 
-An example project showing how to use https://www.carterlabs.ai as a voice assistant. This will run on a Raspberry Pi, Macbook, Windows PC and gives you complete voice input and output to your character.
+An example project showing how to use https://www.carterlabs.ai with your voice in Python. This will run on a Raspberry Pi, Macbook, Windows PC and gives you complete voice input and output to your character.
 
 ![](https://i.giphy.com/media/26DNc9KWmxRd8nkUU/giphy.webp)
 We currently only support a male and female voices and this API is LIKELY TO CHANGE as we move voice out of beta.
