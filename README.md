@@ -2,8 +2,7 @@
 
 An example project showing how to use https://www.carterlabs.ai as a voice assistant. This will run on a Raspberry Pi, Macbook, Windows PC and gives you complete voice input and output to your character.
 
-<iframe src="https://giphy.com/embed/NEvPzZ8bd1V4Y" width="459" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/editingandlayout-NEvPzZ8bd1V4Y">via GIPHY</a></p>
-
+![](https://i.giphy.com/media/NEvPzZ8bd1V4Y/giphy.webp)
 We currently only support a male and female voices and this API is LIKELY TO CHANGE as we move voice out of beta.
 
 We use a combination of PyWebRTC to get the user's voice input, and the Carter API to process the raw audio and generate a high-quality response. It also uses the Carter API to get the agent's voice output.
