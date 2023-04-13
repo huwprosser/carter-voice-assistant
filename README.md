@@ -10,9 +10,13 @@ We use a combination of PyWebRTC to get the user's voice input, and the Carter A
 
 MORE UPDATES SOON!
 
+## JOIN US
+[DISCORD](https://discord.gg/EBfr3vHd8M)
+
 ## START
 
 First, install the other requirements:
+
 `pip install -r requirements.txt`
 
 Then, run the following command to start the server:
