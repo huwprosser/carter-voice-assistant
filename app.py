@@ -85,14 +85,9 @@ class CarterClient():
                         self.sendToCarterRaw(encoded)      
               
 
-    def playAudio(self, text):
+    def playAudio(self, audioURL):
 
-        url_safe_text = urllib.parse.quote(text)
-        r = requests.get(f'https://api.carterlabs.ai/speak/female/{url_safe_text}/abc123')
-        url = r.json()['file_url']
-
-        # download from url
-        r = requests.get(url, stream=True)
+        r = requests.get(audioURL, stream=True)
         with open('temp.mp3', 'wb') as f:
             for chunk in r.iter_content(chunk_size=1024):
                 if chunk:
@@ -132,7 +127,7 @@ class CarterClient():
             print(colored(agent_response['input'], 'grey'))
             print(colored(output['text'], 'magenta'))
             
-            self.playAudio(output['text'])
+            self.playAudio(output['audio'])
 
 if __name__ == "__main__":
 
