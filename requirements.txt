@@ -7,3 +7,4 @@ requests
 termcolor
 yaspin
 scipy
+whisper
