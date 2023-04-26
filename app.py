@@ -1,20 +1,16 @@
 from yaspin import yaspin
 from termcolor import colored
 print()
-print()
 print(colored("""
-                 _            
-                | |           
-   ___ __ _ _ __| |_ ___ _ __ 
-  / __/ _` | '__| __/ _ \ '__|
- | (_| (_| | |  | ||  __/ |   
-  \___\__,_|_|   \__\___|_|   
-                              
-                              
+                             dP                     
+                             88                     
+.d8888b. .d8888b. 88d888b. d8888P .d8888b. 88d888b. 
+88'  `"" 88'  `88 88'  `88   88   88ooood8 88'  `88 
+88.  ... 88.  .88 88         88   88.  ... 88       
+`88888P' `88888P8 dP         dP   `88888P' dP                                         
 """, 'magenta'))
-print(f"Configure your agent at:")
-print(colored("https://controller.carterlabs.ai", "blue"))
-print()
+
+print(colored("https://carterlabs.ai", "light_grey"))
 print()
 
         
@@ -22,7 +18,6 @@ with yaspin(text="Waking agent...") as spinner:
     import os
     import time
     import requests
-    import urllib.parse
     import base64
     import threading
     import scipy.io.wavfile as wav
@@ -33,35 +28,36 @@ with yaspin(text="Waking agent...") as spinner:
 
     mixer.init()
 class CarterClient():
-    def __init__(self, key, user_id, startListening=False):
-       
-        print()
-        print(f"User ID: {user_id}")
-
+    def __init__(self, key, user_id, startListening=True):
         self.key = key
         self.user_id = user_id
-        self.listening = startListening
-        self.vad = VADDetector(self.onSpeechStart, self.onSpeechEnd)
+        self.listening = False
+        self.vad = VADDetector(self.onSpeechStart, self.onSpeechEnd, sensitivity=.5)
         self.vad_data = Queue()
     
         if startListening:
+               
+            self.getOpener()  
             self.startListening()
-
             t = threading.Thread(target=self.transcription_loop)
-            t.start()        
+            t.start()  
+
 
     def startListening(self):
-        print(colored("Listening 👂", 'green'))
+        print()
+        print(colored("Listening...", 'green'))
+        print()
         t = threading.Thread(target=self.vad.startListening)
         t.start()
 
     def toggleListening(self):
         if not self.listening:
             print()
-            print(colored("Listening 👂", 'green'))
+            print(colored("Listening...", 'green'))
 
         while not self.vad_data.empty():
             self.vad_data.get()
+            
         self.listening = not self.listening
 
     def onSpeechStart(self):
@@ -75,7 +71,8 @@ class CarterClient():
         while True:
             if not self.vad_data.empty():
                 data = self.vad_data.get()
-                if self.listening:
+                if self.listening and len(data) > 14000:
+                   
                     self.toggleListening()
                 
                     wav.write('temp.wav', 16000, data)
@@ -113,30 +110,51 @@ class CarterClient():
 
     def sendToCarterRaw(self, text):      
         # display spinner                
-        with yaspin(text="Awaiting Agent...", color="magenta") as spinner:
+        with yaspin(text="One moment, thinking...", color="magenta") as spinner:
         
             r = requests.post('https://api.carterlabs.ai/chat', json={
                 'key': self.key,
                 'audio': text,
                 'playerId': self.user_id,
             })
+            print(r)
             agent_response = r.json()
+            print(agent_response)
             output = agent_response['output']
             
             print()
-            print(colored(agent_response['input'], 'grey'))
-            print(colored(output['text'], 'magenta'))
+        print(colored(agent_response['input'], 'dark_grey'))
+        print(colored(output['text'], 'magenta'))
             
-            self.playAudio(output['audio'])
+        self.playAudio(output['audio'])
+        
+    def getOpener(self):      
+        # display spinner           
+        # self.toggleListening()     
+        with yaspin(text="Loading", color="magenta") as spinner:
+        
+            r = requests.post('https://api.carterlabs.ai/opener', json={
+                'key': self.key,
+                'playerId': self.user_id,
+            })
+            agent_response = r.json()
+            print(agent_response)
+            output = agent_response['output']
+            
+        print(colored(output['text'], 'magenta'))
+            
+        self.playAudio(output['audio'])
+
+       
+
 
 if __name__ == "__main__":
-
-    print("One moment...")
 
     import argparse
     parser = argparse.ArgumentParser()
 
     parser.add_argument("-k", "--key", help="API KEY")
+    parser.add_argument("-u", "--user", help="USER_ID")
 
     if parser.parse_args().key is None:
         print(colored("No API key provided. Please provide an API key with the -k flag.", 'red'))
@@ -144,4 +162,4 @@ if __name__ == "__main__":
     jc = CarterClient(
         startListening=True, 
         key=parser.parse_args().key,
-        user_id='1234')
+        user_id=parser.parse_args().user)

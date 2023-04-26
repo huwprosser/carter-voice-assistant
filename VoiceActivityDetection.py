@@ -15,13 +15,13 @@ FORMAT = pyaudio.paInt16
 audio = pyaudio.PyAudio()
  
 class VADDetector():
-    def __init__(self, onSpeechStart, onSpeechEnd):
+    def __init__(self, onSpeechStart, onSpeechEnd, sensitivity=.4):
         self.channels = [1]
         self.mapping  = [c - 1 for c in self.channels]
         self.device_info = sd.query_devices(None, 'input')
         self.sample_rate = 16000 # int(self.device_info['default_samplerate'])
         self.interval_size = 10 # audio interval size in ms
-        self.sensitivity = .4 #Seconds
+        self.sensitivity = sensitivity #Seconds
         self.block_size = self.sample_rate * self.interval_size / 1000
         self.vad = webrtcvad.Vad()
         self.vad.set_mode(3)
