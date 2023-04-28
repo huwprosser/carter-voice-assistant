@@ -95,7 +95,7 @@ class CarterClient():
         time.sleep(duration + 1)
 
         # unload and delete audio
-        mixer.music.unload()
+        # mixer.music.unload()
 
         # re-activate microphone
         self.toggleListening()
