@@ -1,7 +1,7 @@
 wave
 pygame
 webrtcvad
-playsound==1.2.2
+playsound
 sounddevice
 requests
 termcolor

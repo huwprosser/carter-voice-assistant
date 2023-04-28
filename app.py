@@ -1,6 +1,20 @@
+import os
+import time
+import requests
+import base64
+import threading
+import scipy.io.wavfile as wav
+from io import BytesIO
+from queue import Queue
+from pygame import mixer
 from yaspin import yaspin
 from termcolor import colored
-print()
+from pydub import AudioSegment
+from VoiceActivityDetection import VADDetector
+
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+mixer.init()
+
 print(colored("""
                              dP                     
                              88                     
@@ -13,20 +27,7 @@ print(colored("""
 print(colored("https://carterlabs.ai", "light_grey"))
 print()
 
-        
-with yaspin(text="Waking agent...") as spinner:
-    import os
-    import time
-    import requests
-    import base64
-    import threading
-    import scipy.io.wavfile as wav
-    from queue import Queue
-    os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
-    from pygame import mixer
-    from VoiceActivityDetection import VADDetector
 
-    mixer.init()
 class CarterClient():
     def __init__(self, key, user_id, startListening=True):
         self.key = key
@@ -44,16 +45,13 @@ class CarterClient():
 
 
     def startListening(self):
-        print()
-        print(colored("Listening...", 'green'))
-        print()
         t = threading.Thread(target=self.vad.startListening)
         t.start()
 
     def toggleListening(self):
         if not self.listening:
             print()
-            print(colored("Listening...", 'green'))
+            print(colored(f"{self.name} is listening...", 'green'))
 
         while not self.vad_data.empty():
             self.vad_data.get()
@@ -81,65 +79,61 @@ class CarterClient():
                         encoded = base64.b64encode(wav_bytes).decode('utf-8')
                         self.sendToCarterRaw(encoded)      
               
-
     def playAudio(self, audioURL):
 
-        r = requests.get(audioURL, stream=True)
-        with open('temp.mp3', 'wb') as f:
-            for chunk in r.iter_content(chunk_size=1024):
-                if chunk:
-                    f.write(chunk)
+        # retrive the audio file
+        r = requests.get(audioURL)
                     
         # play audio
-        mixer.music.load('temp.mp3')
-        mixer.music.play()
+        audio_data = AudioSegment.from_file(BytesIO(r.content)).export(format='wav')
+
+        audio = mixer.Sound(audio_data)
+        audio.play()
 
         # wait for audio to finish
-        duration = mixer.Sound('temp.mp3').get_length()
+        duration = audio.get_length()
         time.sleep(duration + 1)
 
         # unload and delete audio
         mixer.music.unload()
-        os.remove('temp.mp3')
 
         # re-activate microphone
         self.toggleListening()
 
         return duration
 
-
     def sendToCarterRaw(self, text):      
         # display spinner                
-        with yaspin(text="One moment, thinking...", color="magenta") as spinner:
+        wait_text = "One moment, thinking..." if self.name is None else f"{self.name} is typing..."
+        with yaspin(text=wait_text, color="magenta") as spinner:
         
             r = requests.post('https://api.carterlabs.ai/chat', json={
                 'key': self.key,
                 'audio': text,
                 'playerId': self.user_id,
             })
-            print(r)
             agent_response = r.json()
-            print(agent_response)
             output = agent_response['output']
             
-            print()
+        # print what the user said
         print(colored(agent_response['input'], 'dark_grey'))
+
+        # print what the agent said
         print(colored(output['text'], 'magenta'))
             
         self.playAudio(output['audio'])
         
-    def getOpener(self):      
-        # display spinner           
-        # self.toggleListening()     
-        with yaspin(text="Loading", color="magenta") as spinner:
+    def getOpener(self):          
+        with yaspin(text="Waking agent...", color="magenta") as spinner:
         
             r = requests.post('https://api.carterlabs.ai/opener', json={
                 'key': self.key,
                 'playerId': self.user_id,
             })
             agent_response = r.json()
-            print(agent_response)
             output = agent_response['output']
+
+            self.name = agent_response['agent']['name']
             
         print(colored(output['text'], 'magenta'))
             
