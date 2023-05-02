@@ -2,11 +2,11 @@
 
 [![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/EBfr3vHd8M)
 
-An example project showing how to use PyWebRTCVad, [Carter](https://www.carterlabs.ai) with your voice in Python. This will run on a Raspberry Pi, Macbook, Windows PC and gives you complete voice input and output to your character. It also uses the Carter API to get the agent's voice output (subject to improvement soon!)
+An example project showing how to use PyWebRTCVad and [Carter](https://www.carterlabs.ai) with your voice in Python. This will run on a Raspberry Pi, Macbook, Windows PC and gives you complete voice input and output to your character. It also uses the Carter API to get the agent's voice output (subject to improvement soon!)
 
-![](https://i.giphy.com/media/26DNc9KWmxRd8nkUU/giphy.webp)
+## Steve Jobs demo:
 
-UPDATES TO CARTER DAILY
+https://user-images.githubusercontent.com/16668357/235618782-0a96bc5b-8c66-4ee8-90d5-cec540da72fa.mp4
 
 ## 🚀 START
 
