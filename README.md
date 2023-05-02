@@ -16,6 +16,6 @@ First, install the other requirements:
 
 Then, run the following command to start the server:
 
-`python app.py --key your-api-key`
+`python app.py --key your-api-key --user=UNIQUE_STRING`
 
 To find out more about the API key and configure your agent, visit the [Carter](https://www.carterlabs.ai/) website.
