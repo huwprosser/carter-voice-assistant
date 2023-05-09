@@ -78,7 +78,20 @@ class CarterClient():
                         wav_bytes = f.read()   
                         encoded = base64.b64encode(wav_bytes).decode('utf-8')
                         self.sendToCarterRaw(encoded)      
-              
+
+    def speak(self, text):
+        r = requests.post('https://api.carterlabs.ai/speak', json={
+            'key': self.key,
+            'text': text,
+            'playerId': self.user_id,
+            'voice_id': 'female'
+        })
+        agent_response = r.json()
+        output = agent_response['file_url']
+
+        # play audio
+        self.playAudio(output)
+
     def playAudio(self, audioURL):
 
         # retrive the audio file
@@ -111,7 +124,7 @@ class CarterClient():
                 'key': self.key,
                 'audio': text,
                 'playerId': self.user_id,
-                'speak': True
+                'speak': False
             })
             agent_response = r.json()
             output = agent_response['output']
@@ -122,7 +135,7 @@ class CarterClient():
         # print what the agent said
         print(colored(output['text'], 'magenta'))
             
-        self.playAudio(output['audio'])
+        self.speak(output['text'])
         
     def getOpener(self):          
         with yaspin(text="Waking agent...", color="magenta") as spinner:

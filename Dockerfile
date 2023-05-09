@@ -9,7 +9,7 @@ COPY requirements.txt .
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -y libportaudio2 libsndfile1 && \
+    apt-get install -y libportaudio2 libsndfile1 libatlas-base-dev && \
     pip install --index-url=https://www.piwheels.org/simple -r requirements.txt
 
 # Copy the rest of the project files to the container
