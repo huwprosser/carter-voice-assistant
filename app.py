@@ -111,6 +111,7 @@ class CarterClient():
                 'key': self.key,
                 'audio': text,
                 'playerId': self.user_id,
+                'speak': True
             })
             agent_response = r.json()
             output = agent_response['output']
