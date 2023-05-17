@@ -142,7 +142,7 @@ class CarterClient():
             r = requests.post('https://api.carterlabs.ai/opener', json={
                 'key': self.key,
                 'playerId': self.user_id,
-                '
+                'speak': True
             })
             agent_response = r.json()
             output = agent_response['output']
