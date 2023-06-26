@@ -28,6 +28,12 @@ first, we need to install PortAudio
 brew install portaudio
 ```
 
+<h3> If the command 'brew' is not found, run this command and then try again.</h3>
+
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
 then, we need to create a new file:
 
 ```
