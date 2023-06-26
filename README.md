@@ -21,7 +21,7 @@ Then, run the following command to start the server:
 To find out more about the API key and configure your agent, visit the [Carter](https://www.carterlabs.ai/) website.
 
 <h3>PyAudio for M1 Macs</h3>
-to install PyAudo for M1 Macs, this will require a small workaround, as PortAudio is not automatically detected.
+to install PyAudio for M1 Macs, this will require a small workaround, as PortAudio is not automatically detected.
 first, we need to install PortAudio
 
 ```
