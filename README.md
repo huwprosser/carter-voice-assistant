@@ -21,11 +21,17 @@ Then, run the following command to start the server:
 To find out more about the API key and configure your agent, visit the [Carter](https://www.carterlabs.ai/) website.
 
 <h3>PyAudio for M1 Macs</h3>
-to install PyAudo for M1 Macs, this will require a small workaround, as PortAudio is not automatically detected.
+to install PyAudio for M1 Macs, this will require a small workaround, as PortAudio is not automatically detected.
 first, we need to install PortAudio
 
 ```
 brew install portaudio
+```
+
+if the command 'brew' is not found, run this command and then try the previous step again:
+
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
 then, we need to create a new file:
